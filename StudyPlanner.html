@@ -1,0 +1,2721 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Study Planner · May 4–10</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #faf7f2;
+        --surface: #ffffff;
+        --surface2: #f3ede4;
+        --border: #e8ddd0;
+        --text: #1c1a17;
+        --muted: #6b6358;
+        --hint: #a89e93;
+        --class-bg: #1e5c40;
+        --class-text: #ffffff;
+        --study-bg: #6b3fa0;
+        --study-text: #ffffff;
+        --transit-bg: #c97b2a;
+        --transit-text: #ffffff;
+        --break-bg: #3a6b94;
+        --break-text: #ffffff;
+        --accent: #c0392b;
+        --accent2: #6b3fa0;
+        --green: #1e5c40;
+        --check: #1e5c40;
+        --progress-track: #e8ddd0;
+        --progress-fill: #6b3fa0;
+        --chip-class: #d4eddc;
+        --chip-class-text: #1e5c40;
+        --chip-study: #ede0f7;
+        --chip-study-text: #6b3fa0;
+        --shadow: rgba(0, 0, 0, 0.08);
+        --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      }
+      [data-theme="dark"] {
+        --bg: #0f0d0b;
+        --surface: #1c1915;
+        --surface2: #252119;
+        --border: #332e27;
+        --text: #f0ebe3;
+        --muted: #a09890;
+        --hint: #6b6358;
+        --class-bg: #2d7a56;
+        --class-text: #ffffff;
+        --study-bg: #8a5bc4;
+        --study-text: #ffffff;
+        --transit-bg: #d4892f;
+        --transit-text: #ffffff;
+        --break-bg: #4a84b0;
+        --break-text: #ffffff;
+        --accent: #e05a4a;
+        --accent2: #a07ad4;
+        --green: #4aad78;
+        --check: #4aad78;
+        --progress-track: #332e27;
+        --progress-fill: #8a5bc4;
+        --chip-class: #1a3d2a;
+        --chip-class-text: #6dcc9c;
+        --chip-study: #2d1e45;
+        --chip-study-text: #c09ae8;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 15px;
+        line-height: 1.5;
+        transition:
+          background 0.3s,
+          color 0.3s;
+      }
+      a {
+        color: var(--accent2);
+      }
+
+      /* HEADER */
+      .header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 16px 10px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .app-title {
+        font-family: "Playfair Display", serif;
+        font-size: 19px;
+        font-weight: 600;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .cherry {
+        font-size: 18px;
+      }
+      .theme-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .theme-btn:hover {
+        background: var(--border);
+      }
+
+      /* PROGRESS BAR */
+      .overall-progress {
+        margin-top: 4px;
+      }
+      .progress-label {
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .progress-track {
+        height: 6px;
+        background: var(--progress-track);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--study-bg), var(--accent2));
+        border-radius: 99px;
+        transition: width 0.4s ease;
+      }
+
+      /* DAY TABS */
+      .day-tabs {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        padding: 10px 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        position: sticky;
+        top: 120px;
+        z-index: 99;
+      }
+      .day-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .day-tab {
+        flex-shrink: 0;
+        padding: 7px 14px;
+        border-radius: 99px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        transition: all 0.2s;
+        white-space: nowrap;
+        text-align: center;
+      }
+      .day-tab .tab-num {
+        font-weight: 600;
+        font-size: 15px;
+        display: block;
+        color: var(--text);
+      }
+      .day-tab.active {
+        background: var(--study-bg);
+        border-color: var(--study-bg);
+        color: #fff;
+      }
+      .day-tab.active .tab-num {
+        color: #fff;
+      }
+      .day-tab:hover:not(.active) {
+        border-color: var(--accent2);
+        color: var(--text);
+      }
+
+      /* MAIN CONTENT */
+      .main {
+        padding: 16px;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      /* DAY VIEW */
+      .day-view {
+        display: none;
+      }
+      .day-view.active {
+        display: block;
+      }
+
+      .day-header {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+        box-shadow: var(--card-shadow);
+      }
+      .day-name {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .day-date {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .day-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .chip {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 99px;
+        letter-spacing: 0.02em;
+      }
+      .chip-class {
+        background: var(--chip-class);
+        color: var(--chip-class-text);
+      }
+      .chip-study {
+        background: var(--chip-study);
+        color: var(--chip-study-text);
+      }
+      .chip-free {
+        background: #ffeedd;
+        color: #c97b2a;
+      }
+      [data-theme="dark"] .chip-free {
+        background: #2d1e0a;
+        color: #e8a84a;
+      }
+
+      /* EVENT CARDS */
+      .event-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-bottom: 10px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: border-color 0.2s;
+      }
+      .event-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
+      }
+      .event-stripe {
+        width: 4px;
+        min-height: 40px;
+        border-radius: 99px;
+        flex-shrink: 0;
+        align-self: stretch;
+      }
+      .stripe-class {
+        background: var(--class-bg);
+      }
+      .stripe-study {
+        background: var(--study-bg);
+      }
+      .stripe-transit {
+        background: var(--transit-bg);
+      }
+      .stripe-break {
+        background: var(--break-bg);
+      }
+
+      .event-info {
+        flex: 1;
+      }
+      .event-time {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+      }
+      .event-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.3;
+      }
+      .event-sub {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .event-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .badge-class {
+        background: var(--class-bg);
+        color: var(--class-text);
+      }
+      .badge-study {
+        background: var(--study-bg);
+        color: var(--study-text);
+      }
+      .badge-transit {
+        background: var(--transit-bg);
+        color: var(--transit-text);
+      }
+      .badge-break {
+        background: var(--break-bg);
+        color: var(--break-text);
+      }
+
+      .event-expand-btn {
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        background: var(--surface2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+        margin-top: 4px;
+        color: var(--muted);
+      }
+      .event-expand-btn:hover {
+        background: var(--border);
+        color: var(--text);
+      }
+
+      /* TASKS */
+      .event-tasks {
+        display: none;
+        padding: 4px 14px 14px;
+        border-top: 1px solid var(--border);
+        margin-top: 0;
+      }
+      .event-tasks.open {
+        display: block;
+      }
+      .tasks-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+        margin-top: 10px;
+      }
+      .task-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .task-item:last-child {
+        border-bottom: none;
+      }
+      .task-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--border);
+        border-radius: 6px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        transition: all 0.2s;
+        margin-top: 1px;
+        cursor: pointer;
+      }
+      .task-checkbox.checked {
+        background: var(--check);
+        border-color: var(--check);
+        color: white;
+      }
+      .task-text {
+        font-size: 14px;
+        color: var(--text);
+        flex: 1;
+        line-height: 1.4;
+      }
+      .task-text.done {
+        text-decoration: line-through;
+        color: var(--hint);
+      }
+      .task-note {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      /* STUDY TIP */
+      .study-tip {
+        background: var(--chip-study);
+        border: 1px solid var(--study-bg) 30;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--chip-study-text);
+        line-height: 1.5;
+      }
+      [data-theme="dark"] .study-tip {
+        border-color: var(--study-bg) 60;
+      }
+      .study-tip strong {
+        font-weight: 600;
+      }
+
+      /* DAY PROGRESS */
+      .day-progress-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .day-progress-label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .day-progress-track {
+        flex: 1;
+        height: 5px;
+        background: var(--progress-track);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .day-progress-fill {
+        height: 100%;
+        background: var(--check);
+        border-radius: 99px;
+        transition: width 0.4s;
+      }
+      .day-progress-pct {
+        font-size: 12px;
+        color: var(--check);
+        font-weight: 600;
+        min-width: 32px;
+        text-align: right;
+      }
+
+      /* TOPIC TRACKER */
+      .topic-tracker {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        box-shadow: var(--card-shadow);
+      }
+      .tracker-title {
+        font-family: "Playfair Display", serif;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: var(--text);
+      }
+      .topic-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .topic-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        transition: all 0.2s;
+      }
+      .topic-row:hover {
+        border-color: var(--study-bg);
+      }
+      .topic-checkbox {
+        width: 22px;
+        height: 22px;
+        border: 2px solid var(--border);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+      .topic-checkbox.mastered {
+        background: var(--check);
+        border-color: var(--check);
+        color: white;
+      }
+      .topic-name {
+        font-size: 13px;
+        color: var(--text);
+        font-weight: 500;
+        flex: 1;
+      }
+      .topic-cat {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 99px;
+        letter-spacing: 0.03em;
+      }
+      .cat-num {
+        background: var(--chip-study);
+        color: var(--chip-study-text);
+      }
+      .cat-elec {
+        background: var(--chip-class);
+        color: var(--chip-class-text);
+      }
+      .cat-skill {
+        background: #fff3cd;
+        color: #856404;
+      }
+      [data-theme="dark"] .cat-skill {
+        background: #2d2000;
+        color: #f0c040;
+      }
+
+      /* LEGEND */
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+
+      /* NAV ARROWS */
+      .day-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 8px;
+      }
+      .nav-btn {
+        padding: 10px 18px;
+        border: 1px solid var(--border);
+        border-radius: 99px;
+        background: var(--surface);
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .nav-btn:hover {
+        background: var(--surface2);
+        border-color: var(--accent2);
+      }
+      .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+      .nav-center {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* FOOTER */
+      .footer {
+        text-align: center;
+        padding: 20px 16px;
+        font-size: 12px;
+        color: var(--hint);
+      }
+
+      /* NOTICE */
+      .notice {
+        background: #fff8e7;
+        border: 1px solid #f0c84a;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 12px;
+        color: #7a5800;
+        margin-bottom: 12px;
+        line-height: 1.5;
+      }
+      [data-theme="dark"] .notice {
+        background: #1e1600;
+        border-color: #5a4000;
+        color: #f0c84a;
+      }
+
+      /* SCROLL */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      @media (max-width: 400px) {
+        .day-name {
+          font-size: 20px;
+        }
+        .main {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div class="header">
+      <div class="header-top">
+        <div class="app-title">
+          <span class="cherry">🌸</span>
+          Finals Week Planner
+        </div>
+        <button
+          class="theme-btn"
+          onclick="toggleTheme()"
+          id="themeBtn"
+          title="Toggle dark mode"
+        >
+          🌙
+        </button>
+      </div>
+      <div class="overall-progress">
+        <div class="progress-label">
+          <span>Overall Progress</span>
+          <span id="overallPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="overallBar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-tabs" id="dayTabs">
+      <div class="day-tab active" onclick="showDay(0)" id="tab-0">
+        <span class="tab-num">4</span>Mon
+      </div>
+      <div class="day-tab" onclick="showDay(1)" id="tab-1">
+        <span class="tab-num">5</span>Tue
+      </div>
+      <div class="day-tab" onclick="showDay(2)" id="tab-2">
+        <span class="tab-num">6</span>Wed
+      </div>
+      <div class="day-tab" onclick="showDay(3)" id="tab-3">
+        <span class="tab-num">7</span>Thu
+      </div>
+      <div class="day-tab" onclick="showDay(4)" id="tab-4">
+        <span class="tab-num">8</span>Fri
+      </div>
+      <div class="day-tab" onclick="showDay(5)" id="tab-5">
+        <span class="tab-num">9</span>Sat
+      </div>
+      <div class="day-tab" onclick="showDay(6)" id="tab-6">
+        <span class="tab-num">10</span>Sun
+      </div>
+    </div>
+
+    <div class="main">
+      <!-- ===== MONDAY MAY 4 ===== -->
+      <div class="day-view active" id="day-0">
+        <div class="day-header">
+          <div class="day-name">Monday</div>
+          <div class="day-date">May 4, 2025</div>
+          <div class="day-chips">
+            <span class="chip chip-class">3 Classes</span>
+            <span class="chip chip-study">3 Study Blocks</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-0" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-0">0%</span>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:00 – 7:00 AM</div>
+              <div class="event-title">📖 Morning Prep</div>
+              <div class="event-sub">Gaussian Elimination Overview</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t0')">
+              <div class="task-checkbox" id="m0t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Review what "systems of linear equations" means
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t1')">
+              <div class="task-checkbox" id="m0t1">✓</div>
+              <div>
+                <div class="task-text">
+                  Write down the general steps of Gaussian Elimination (no
+                  formulas yet, just words)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t2')">
+              <div class="task-checkbox" id="m0t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Create a blank formula sheet to fill in all week
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Tip:</strong> Keep it light. You're warming up your
+              brain. Skim, don't memorize yet.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">10:00 – 11:30 AM</div>
+              <div class="event-title">Living in the IT Era</div>
+              <div class="event-sub">CE-29A · Attend class</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">11:30 AM – 12:30 PM</div>
+              <div class="event-title">🧠 Lunch Study</div>
+              <div class="event-sub">KVL Basics — Eat while you review!</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t3')">
+              <div class="task-checkbox" id="m0t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Write KVL rule in your own words: "Sum of all voltages in a
+                  loop = 0"
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t4')">
+              <div class="task-checkbox" id="m0t4">✓</div>
+              <div>
+                <div class="task-text">
+                  Draw and label a simple 2-loop circuit from memory
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t5')">
+              <div class="task-checkbox" id="m0t5">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 1 easy KVL problem (find 1 unknown voltage)
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Tip:</strong> KVL is your weak spot. Even 30 min daily
+              adds up. Don't skip this block!
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 2:30 PM</div>
+              <div class="event-title">Numerical Methods</div>
+              <div class="event-sub">
+                CE-29A · Listen actively — extra notes!
+              </div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">2:30 – 4:00 PM</div>
+              <div class="event-title">📐 Post-Class Review</div>
+              <div class="event-sub">Naive Gaussian Elimination</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t6')">
+              <div class="task-checkbox" id="m0t6">✓</div>
+              <div>
+                <div class="task-text">
+                  Re-read today's Numerical Methods class notes
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t7')">
+              <div class="task-checkbox" id="m0t7">✓</div>
+              <div>
+                <div class="task-text">
+                  Write out the Naive Gauss steps: Forward Elimination → Back
+                  Substitution
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t8')">
+              <div class="task-checkbox" id="m0t8">✓</div>
+              <div>
+                <div class="task-text">
+                  Redo one example from class step-by-step without looking
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Tip:</strong> Naive Gauss has no pivoting. Remember: it
+              can fail if a pivot is zero. Note this as a limitation!
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">4:00 – 5:30 PM</div>
+              <div class="event-title">Life and Works of Rizal</div>
+              <div class="event-sub">CE21</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-transit"></div>
+            <div class="event-info">
+              <div class="event-time">5:30 – 6:30 PM</div>
+              <div class="event-title">🚶 Walking Home</div>
+              <div class="event-sub">
+                Listen to a recorded lecture or summary video
+              </div>
+            </div>
+            <div><span class="event-badge badge-transit">Transit</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:30 – 8:30 PM</div>
+              <div class="event-title">📚 Evening Deep Study</div>
+              <div class="event-sub">Naive Gauss — Practice Problems</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t9')">
+              <div class="task-checkbox" id="m0t9">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 3×3 system using Naive Gauss (Problem 1)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t10')">
+              <div class="task-checkbox" id="m0t10">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 3×3 system using Naive Gauss (Problem 2)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t11')">
+              <div class="task-checkbox" id="m0t11">✓</div>
+              <div>
+                <div class="task-text">
+                  Check answers and identify where you made errors
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm0t12')">
+              <div class="task-checkbox" id="m0t12">✓</div>
+              <div>
+                <div class="task-text">
+                  Add Naive Gauss formula to your running formula sheet
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Technique:</strong> Use the "teach-back" method —
+              explain Naive Gauss out loud to yourself after solving. If you can
+              explain it, you know it.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">8:30 – 10:00 PM</div>
+              <div class="event-title">😴 Wind Down</div>
+              <div class="event-sub">
+                Rest, light reading, no screens if possible
+              </div>
+            </div>
+            <div><span class="event-badge badge-break">Rest</span></div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" disabled>← Prev</button>
+          <span class="nav-center">Day 1 of 7</span>
+          <button class="nav-btn" onclick="showDay(1)">Tue →</button>
+        </div>
+      </div>
+
+      <!-- ===== TUESDAY MAY 5 ===== -->
+      <div class="day-view" id="day-1">
+        <div class="day-header">
+          <div class="day-name">Tuesday</div>
+          <div class="day-date">May 5, 2025</div>
+          <div class="day-chips">
+            <span class="chip chip-class">3 Classes (Lab-heavy)</span>
+            <span class="chip chip-study">2 Study Blocks</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-1" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-1">0%</span>
+          </div>
+        </div>
+        <div class="notice">
+          ⚠️ Heads up: Classes start early at 7 AM. Set your alarm the night
+          before!
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:00 – 7:00 AM</div>
+              <div class="event-title">📖 Morning Prep</div>
+              <div class="event-sub">Clampers — Introduction</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t0')">
+              <div class="task-checkbox" id="m1t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Read your notes/textbook: What is a Clamper circuit?
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t1')">
+              <div class="task-checkbox" id="m1t1">✓</div>
+              <div>
+                <div class="task-text">
+                  List the 3 types: Positive, Negative, and Biased Clampers
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Tip:</strong> Clampers shift the DC level of a signal
+              without changing its shape. Think of it as "lifting" or "lowering"
+              a waveform.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">7:00 – 10:00 AM</div>
+              <div class="event-title">Fundamentals of Electronic Circuits</div>
+              <div class="event-sub">DigiLab3 · Lab class</div>
+            </div>
+            <div><span class="event-badge badge-class">Lab</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">10:00 AM – 1:00 PM</div>
+              <div class="event-title">Software Design</div>
+              <div class="event-sub">CE-Lab1 · Lab class</div>
+            </div>
+            <div><span class="event-badge badge-class">Lab</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 2:30 PM</div>
+              <div class="event-title">Gender and Society</div>
+              <div class="event-sub">CE-21</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">2:30 – 5:00 PM</div>
+              <div class="event-title">📐 Afternoon Study</div>
+              <div class="event-sub">Gauss-Jordan Elimination</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t2')">
+              <div class="task-checkbox" id="m1t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Learn how Gauss-Jordan differs from Naive Gauss (hint:
+                  eliminates both up and down, reaches RREF)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t3')">
+              <div class="task-checkbox" id="m1t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve one 3×3 system using Gauss-Jordan, step by step
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t4')">
+              <div class="task-checkbox" id="m1t4">✓</div>
+              <div>
+                <div class="task-text">
+                  Compare: When would you use Gauss-Jordan over Naive Gauss?
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Key Difference:</strong> Naive Gauss = upper triangular
+              + back substitution. Gauss-Jordan = reduced row echelon (RREF), no
+              back substitution needed. Cleaner, but more operations.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-transit"></div>
+            <div class="event-info">
+              <div class="event-time">5:00 – 6:30 PM</div>
+              <div class="event-title">🚶 Walking Home</div>
+              <div class="event-sub">
+                Rest your eyes. Think about what you studied.
+              </div>
+            </div>
+            <div><span class="event-badge badge-transit">Transit</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:30 – 8:30 PM</div>
+              <div class="event-title">⚡ Evening Study</div>
+              <div class="event-sub">Clampers Deep Dive + KVL</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t5')">
+              <div class="task-checkbox" id="m1t5">✓</div>
+              <div>
+                <div class="task-text">
+                  Sketch circuit diagrams for Positive and Negative Clampers
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t6')">
+              <div class="task-checkbox" id="m1t6">✓</div>
+              <div>
+                <div class="task-text">
+                  Trace the input/output waveforms for each clamper type
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm1t7')">
+              <div class="task-checkbox" id="m1t7">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 2 KVL problems (focus on identifying loops correctly)
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 KVL Tip:</strong> Always assign a direction (clockwise
+              or counterclockwise) to your loop first. Stick to it. Voltage
+              rises (+) when going from – to + of a component.
+            </div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" onclick="showDay(0)">← Mon</button>
+          <span class="nav-center">Day 2 of 7</span>
+          <button class="nav-btn" onclick="showDay(2)">Wed →</button>
+        </div>
+      </div>
+
+      <!-- ===== WEDNESDAY MAY 6 ===== -->
+      <div class="day-view" id="day-2">
+        <div class="day-header">
+          <div class="day-name">Wednesday</div>
+          <div class="day-date">May 6, 2025 · Heavy Day</div>
+          <div class="day-chips">
+            <span class="chip chip-class">5 Classes (Packed!)</span>
+            <span class="chip chip-study">Light Study Only</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-2" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-2">0%</span>
+          </div>
+        </div>
+        <div class="notice">
+          📌 This is your busiest day. Keep study goals minimal — review only.
+          No pressure to go deep today.
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:00 – 7:00 AM</div>
+              <div class="event-title">📖 Morning Light Review</div>
+              <div class="event-sub">Gauss-Jacobi — Reading Only</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm2t0')">
+              <div class="task-checkbox" id="m2t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Read about Gauss-Jacobi method (iterative, not direct
+                  elimination)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm2t1')">
+              <div class="task-checkbox" id="m2t1">✓</div>
+              <div>
+                <div class="task-text">
+                  Note: Jacobi updates ALL unknowns simultaneously using
+                  previous values
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Just Read Today.</strong> Wednesday is a marathon. Save
+              your energy for classes.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">7:00 – 10:00 AM</div>
+              <div class="event-title">Software Design</div>
+              <div class="event-sub">CE-29A</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">10:00 – 11:30 AM</div>
+              <div class="event-title">Living in the IT Era</div>
+              <div class="event-sub">CE-29A</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">11:30 AM – 1:00 PM</div>
+              <div class="event-title">Numerical Methods</div>
+              <div class="event-sub">CE-29A · Pay extra attention today!</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 4:00 PM</div>
+              <div class="event-title">CompE Drafting & Design</div>
+              <div class="event-sub">CE-Lab11</div>
+            </div>
+            <div><span class="event-badge badge-class">Lab</span></div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">4:00 – 5:30 PM</div>
+              <div class="event-title">Life and Works of Rizal</div>
+              <div class="event-sub">CE21</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-transit"></div>
+            <div class="event-info">
+              <div class="event-time">5:30 – 6:30 PM</div>
+              <div class="event-title">🚶 Walking Home</div>
+              <div class="event-sub">Rest your mind. You've earned it.</div>
+            </div>
+            <div><span class="event-badge badge-transit">Transit</span></div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:30 – 7:30 PM</div>
+              <div class="event-title">🗒️ Quick Compare</div>
+              <div class="event-sub">Gauss Methods Table</div>
+            </div>
+            <div><span class="event-badge badge-study">Review</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm2t2')">
+              <div class="task-checkbox" id="m2t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Make a comparison table: Naive Gauss vs Gauss-Jordan vs
+                  Gauss-Jacobi
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm2t3')">
+              <div class="task-checkbox" id="m2t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Columns: Type (Direct/Iterative), Steps, When to use,
+                  Limitation
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 This table will be gold for exams.</strong> Build it
+              once, use it forever.
+            </div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">7:30 PM onwards</div>
+              <div class="event-title">😴 Rest Early</div>
+              <div class="event-sub">
+                Big study day tomorrow. Sleep is studying too.
+              </div>
+            </div>
+            <div><span class="event-badge badge-break">Rest</span></div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" onclick="showDay(1)">← Tue</button>
+          <span class="nav-center">Day 3 of 7</span>
+          <button class="nav-btn" onclick="showDay(3)">Thu →</button>
+        </div>
+      </div>
+
+      <!-- ===== THURSDAY MAY 7 ===== -->
+      <div class="day-view" id="day-3">
+        <div class="day-header">
+          <div class="day-name">Thursday</div>
+          <div class="day-date">May 7, 2025 · Gap Day!</div>
+          <div class="day-chips">
+            <span class="chip chip-class">2 Classes</span>
+            <span class="chip chip-study">3-hr Gap = Study Gold</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-3" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-3">0%</span>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:00 – 7:00 AM</div>
+              <div class="event-title">📖 Morning Prep</div>
+              <div class="event-sub">Gauss-Seidel Introduction</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t0')">
+              <div class="task-checkbox" id="m3t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Read about Gauss-Seidel (also iterative, but uses updated
+                  values immediately)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t1')">
+              <div class="task-checkbox" id="m3t1">✓</div>
+              <div>
+                <div class="task-text">
+                  Note the key difference from Jacobi: Seidel uses new values as
+                  soon as they're available
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">7:00 – 10:00 AM</div>
+              <div class="event-title">Fundamentals of Electronic Circuits</div>
+              <div class="event-sub">CE-29A</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">10:00 AM – 12:30 PM</div>
+              <div class="event-title">📐 Gap Study Block</div>
+              <div class="event-sub">
+                Gauss-Seidel Practice + Jacobi vs Seidel
+              </div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t2')">
+              <div class="task-checkbox" id="m3t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve a 3×3 iterative system using Gauss-Seidel (run 3
+                  iterations)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t3')">
+              <div class="task-checkbox" id="m3t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve the same system with Gauss-Jacobi and compare
+                  convergence speed
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t4')">
+              <div class="task-checkbox" id="m3t4">✓</div>
+              <div>
+                <div class="task-text">
+                  Update your comparison table with Gauss-Seidel column
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t5')">
+              <div class="task-checkbox" id="m3t5">✓</div>
+              <div>
+                <div class="task-text">
+                  Check: does your system satisfy diagonal dominance? (Required
+                  for convergence)
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Convergence Rule:</strong> Both Jacobi and Seidel need
+              diagonally dominant matrices to guarantee convergence.
+              Gauss-Seidel usually converges faster (about 2x).
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-class"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 2:30 PM</div>
+              <div class="event-title">Gender and Society</div>
+              <div class="event-sub">CE-21</div>
+            </div>
+            <div><span class="event-badge badge-class">Class</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">2:30 – 5:00 PM</div>
+              <div class="event-title">⚡ BJT Introduction</div>
+              <div class="event-sub">Bipolar Junction Transistor Basics</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t6')">
+              <div class="task-checkbox" id="m3t6">✓</div>
+              <div>
+                <div class="task-text">
+                  Draw and label NPN and PNP transistor symbols (E, B, C)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t7')">
+              <div class="task-checkbox" id="m3t7">✓</div>
+              <div>
+                <div class="task-text">
+                  Learn the 3 operating regions: Cutoff, Active (linear),
+                  Saturation
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t8')">
+              <div class="task-checkbox" id="m3t8">✓</div>
+              <div>
+                <div class="task-text">
+                  Write the relationship: IC = β × IB (current gain formula)
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Memory Trick:</strong> BJT regions — think of a faucet:
+              Cutoff = tap off, Active = tap halfway (amplifier mode),
+              Saturation = tap fully open. IB controls IC like a valve.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-transit"></div>
+            <div class="event-info">
+              <div class="event-time">5:00 – 6:30 PM</div>
+              <div class="event-title">🚶 Walking Home</div>
+              <div class="event-sub">Mentally quiz yourself on BJT regions</div>
+            </div>
+            <div><span class="event-badge badge-transit">Transit</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:30 – 8:30 PM</div>
+              <div class="event-title">🔌 Evening — BJT + KVL</div>
+              <div class="event-sub">KVL applied to BJT circuits</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t9')">
+              <div class="task-checkbox" id="m3t9">✓</div>
+              <div>
+                <div class="task-text">
+                  Apply KVL to the Base-Emitter loop of an NPN BJT circuit
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t10')">
+              <div class="task-checkbox" id="m3t10">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve for IB given VCC, RB, and VBE = 0.7V
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm3t11')">
+              <div class="task-checkbox" id="m3t11">✓</div>
+              <div>
+                <div class="task-text">
+                  Calculate IC = β × IB for that circuit
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 This combines KVL + BJT!</strong> Great for your
+              analytical skills. Always assume VBE = 0.7V for silicon BJTs
+              unless stated otherwise.
+            </div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" onclick="showDay(2)">← Wed</button>
+          <span class="nav-center">Day 4 of 7</span>
+          <button class="nav-btn" onclick="showDay(4)">Fri →</button>
+        </div>
+      </div>
+
+      <!-- ===== FRIDAY MAY 8 ===== -->
+      <div class="day-view" id="day-4">
+        <div class="day-header">
+          <div class="day-name">Friday</div>
+          <div class="day-date">May 8, 2025 · FREE Study Day 🎉</div>
+          <div class="day-chips">
+            <span class="chip chip-free">No PATH Class</span>
+            <span class="chip chip-study">Intensive Study</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-4" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-4">0%</span>
+          </div>
+        </div>
+        <div class="notice">
+          🌟 This is your power day. No PATH class means you can tackle the 3
+          hardest Numerical Methods topics today!
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">8:00 – 10:00 AM</div>
+              <div class="event-title">📐 Block 1: Euler's Method</div>
+              <div class="event-sub">Ordinary Differential Equations (ODE)</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t0')">
+              <div class="task-checkbox" id="m4t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Understand Euler's formula: y(n+1) = y(n) + h·f(x(n), y(n))
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t1')">
+              <div class="task-checkbox" id="m4t1">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 1 ODE problem using Euler's Method (use step size h =
+                  0.1, 3 steps)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t2')">
+              <div class="task-checkbox" id="m4t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Compare your result to the exact solution — note the error
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Key Insight:</strong> Euler's is the simplest ODE
+              solver but accumulates error. Smaller h = more steps = more
+              accurate. This is why Runge-Kutta exists!
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">10:00 AM – 12:00 PM</div>
+              <div class="event-title">🔍 Block 2: Golden Section Search</div>
+              <div class="event-sub">Optimization Method</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t3')">
+              <div class="task-checkbox" id="m4t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Learn the Golden Ratio: φ = 0.618 (or 0.382 depending on side)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t4')">
+              <div class="task-checkbox" id="m4t4">✓</div>
+              <div>
+                <div class="task-text">
+                  Understand the bracket reduction steps: [a, b] → find x1 and
+                  x2 using φ
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t5')">
+              <div class="task-checkbox" id="m4t5">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 1 optimization problem: find minimum of f(x) on [a, b]
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t6')">
+              <div class="task-checkbox" id="m4t6">✓</div>
+              <div>
+                <div class="task-text">
+                  Note: Golden Section only works for unimodal functions (one
+                  hump)
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Memory Aid:</strong> Golden Section = "squeeze from
+              both sides using the golden ratio." Each step eliminates 38.2% of
+              the search range.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">12:00 – 1:00 PM</div>
+              <div class="event-title">🍱 Lunch Break</div>
+              <div class="event-sub">Rest. Eat well. Hydrate!</div>
+            </div>
+            <div><span class="event-badge badge-break">Break</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 3:00 PM</div>
+              <div class="event-title">🚀 Block 3: Runge-Kutta Method</div>
+              <div class="event-sub">4th Order (RK4) — ODE Solver</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t7')">
+              <div class="task-checkbox" id="m4t7">✓</div>
+              <div>
+                <div class="task-text">
+                  Write out RK4 formula: k1, k2, k3, k4, then y(n+1) = y(n) +
+                  (h/6)(k1+2k2+2k3+k4)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t8')">
+              <div class="task-checkbox" id="m4t8">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve the same ODE from this morning using RK4
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t9')">
+              <div class="task-checkbox" id="m4t9">✓</div>
+              <div>
+                <div class="task-text">
+                  Compare: Euler's error vs RK4 error — which is more accurate?
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 RK4 vs Euler:</strong> RK4 uses 4 slope evaluations per
+              step. Much more accurate than Euler's (4th order error). More
+              computation, better result. Usually RK4 is the "standard" ODE
+              solver.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">3:00 – 5:00 PM</div>
+              <div class="event-title">📝 KVL Problem Sets</div>
+              <div class="event-sub">Analytical Skills Practice</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t10')">
+              <div class="task-checkbox" id="m4t10">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 3 KVL problems with 2-3 loops each
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t11')">
+              <div class="task-checkbox" id="m4t11">✓</div>
+              <div>
+                <div class="task-text">
+                  Time yourself: aim for under 10 minutes per problem
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t12')">
+              <div class="task-checkbox" id="m4t12">✓</div>
+              <div>
+                <div class="task-text">
+                  Review errors — are you making sign mistakes? Label polarities
+                  explicitly.
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Analytical Skill Builder:</strong> After solving, write
+              a 2-sentence explanation of your approach. "I chose clockwise
+              direction, and assigned voltage drops as negative..." — this
+              trains your analytical writing.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-transit"></div>
+            <div class="event-info">
+              <div class="event-time">5:00 – 6:30 PM</div>
+              <div class="event-title">🚶 Walk / Rest</div>
+              <div class="event-sub">You did a lot today. Be proud!</div>
+            </div>
+            <div><span class="event-badge badge-transit">Transit</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">6:30 – 8:00 PM</div>
+              <div class="event-title">📋 Light Review</div>
+              <div class="event-sub">All Methods Summary</div>
+            </div>
+            <div><span class="event-badge badge-study">Review</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t13')">
+              <div class="task-checkbox" id="m4t13">✓</div>
+              <div>
+                <div class="task-text">
+                  List all 8 Numerical Methods topics — can you describe each in
+                  1 sentence?
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm4t14')">
+              <div class="task-checkbox" id="m4t14">✓</div>
+              <div>
+                <div class="task-text">
+                  Update your master formula sheet with today's topics
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 You're 4/7 days done!</strong> Great work. Rest well
+              tonight — Saturday is for electronics deep dive.
+            </div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" onclick="showDay(3)">← Thu</button>
+          <span class="nav-center">Day 5 of 7</span>
+          <button class="nav-btn" onclick="showDay(5)">Sat →</button>
+        </div>
+      </div>
+
+      <!-- ===== SATURDAY MAY 9 ===== -->
+      <div class="day-view" id="day-5">
+        <div class="day-header">
+          <div class="day-name">Saturday</div>
+          <div class="day-date">May 9, 2025 · Electronics Deep Dive</div>
+          <div class="day-chips">
+            <span class="chip chip-free">No Classes</span>
+            <span class="chip chip-study">Focus: Clampers + BJT</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-5" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-5">0%</span>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">9:00 – 11:00 AM</div>
+              <div class="event-title">⚡ Clampers Deep Dive</div>
+              <div class="event-sub">Positive, Negative & Biased Clampers</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t0')">
+              <div class="task-checkbox" id="m5t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Draw all 3 clamper circuits from memory: Positive, Negative,
+                  Biased
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t1')">
+              <div class="task-checkbox" id="m5t1">✓</div>
+              <div>
+                <div class="task-text">
+                  Sketch input vs output waveforms for each type
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t2')">
+              <div class="task-checkbox" id="m5t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Explain biased clamper: what does adding a DC source (VDC) do
+                  to the output?
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t3')">
+              <div class="task-checkbox" id="m5t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 1 clamper problem: find output waveform Vo given Vin =
+                  10sin(ωt)
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Clamper Rule of Thumb:</strong> Positive clamper →
+              diode points down → output raised (clamped above zero). Negative
+              clamper → diode points up → output lowered. The capacitor
+              "charges" to shift the signal.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">11:00 AM – 1:00 PM</div>
+              <div class="event-title">🔬 BJT Deep Dive</div>
+              <div class="event-sub">Operating Regions + Analysis</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t4')">
+              <div class="task-checkbox" id="m5t4">✓</div>
+              <div>
+                <div class="task-text">
+                  Memorize the 3 regions and their junction states (BE, BC
+                  forward/reverse biased)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t5')">
+              <div class="task-checkbox" id="m5t5">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve a DC bias analysis: find IB, IC, VCE for a given NPN
+                  circuit
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t6')">
+              <div class="task-checkbox" id="m5t6">✓</div>
+              <div>
+                <div class="task-text">
+                  Determine operating region: use VCE and VCE(sat) to check if
+                  it's active or saturated
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Region Check:</strong> If VCE > VCE(sat) ≈ 0.2V →
+              Active Region. If VCE ≤ VCE(sat) → Saturation. If IB = 0 → Cutoff.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 2:00 PM</div>
+              <div class="event-title">🍱 Lunch Break</div>
+              <div class="event-sub">Eat, relax, scroll (just for a bit!)</div>
+            </div>
+            <div><span class="event-badge badge-break">Break</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">2:00 – 4:00 PM</div>
+              <div class="event-title">🧩 Mixed Practice Problems</div>
+              <div class="event-sub">Clampers + BJT + KVL Combined</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t7')">
+              <div class="task-checkbox" id="m5t7">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 2 clamper problems independently (no notes)
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t8')">
+              <div class="task-checkbox" id="m5t8">✓</div>
+              <div>
+                <div class="task-text">
+                  Solve 1 full BJT DC analysis from scratch
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t9')">
+              <div class="task-checkbox" id="m5t9">✓</div>
+              <div>
+                <div class="task-text">
+                  Do 3 KVL problems — aim for 8 minutes each, with clean and
+                  labeled solutions
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">4:00 – 5:00 PM</div>
+              <div class="event-title">🎯 Analytical Skills Workshop</div>
+              <div class="event-sub">Structured Problem-Solving Practice</div>
+            </div>
+            <div><span class="event-badge badge-study">Skills</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t10')">
+              <div class="task-checkbox" id="m5t10">✓</div>
+              <div>
+                <div class="task-text">
+                  Practice GFSA: Given → Find → Solution → Answer format for 3
+                  problems
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm5t11')">
+              <div class="task-checkbox" id="m5t11">✓</div>
+              <div>
+                <div class="task-text">
+                  Write a brief explanation (3–4 sentences) justifying your
+                  solution steps
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 Analytical Tip:</strong> GFSA format makes your
+              solutions organized and readable — great for exams. "Given: ...,
+              Find: ..., Solution: step-by-step, Answer: with units"
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">5:00 PM onwards</div>
+              <div class="event-title">😴 Rest Evening</div>
+              <div class="event-sub">
+                Watch something fun. You've studied hard this week!
+              </div>
+            </div>
+            <div><span class="event-badge badge-break">Rest</span></div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" onclick="showDay(4)">← Fri</button>
+          <span class="nav-center">Day 6 of 7</span>
+          <button class="nav-btn" onclick="showDay(6)">Sun →</button>
+        </div>
+      </div>
+
+      <!-- ===== SUNDAY MAY 10 ===== -->
+      <div class="day-view" id="day-6">
+        <div class="day-header">
+          <div class="day-name">Sunday</div>
+          <div class="day-date">May 10, 2025 · Final Review Day</div>
+          <div class="day-chips">
+            <span class="chip chip-free">No Classes</span>
+            <span class="chip chip-study">Review + Rest</span>
+          </div>
+          <div class="day-progress-row">
+            <span class="day-progress-label">Tasks done</span>
+            <div class="day-progress-track">
+              <div class="day-progress-fill" id="dp-6" style="width: 0%"></div>
+            </div>
+            <span class="day-progress-pct" id="dpp-6">0%</span>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">9:00 – 11:00 AM</div>
+              <div class="event-title">📊 Numerical Methods Full Review</div>
+              <div class="event-sub">All 8 Methods — Rapid Recall</div>
+            </div>
+            <div><span class="event-badge badge-study">Review</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t0')">
+              <div class="task-checkbox" id="m6t0">✓</div>
+              <div>
+                <div class="task-text">
+                  Quiz yourself on all 8 methods: cover your notes and write
+                  each method name + 1-line description
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t1')">
+              <div class="task-checkbox" id="m6t1">✓</div>
+              <div>
+                <div class="task-text">
+                  Identify which method you're weakest on — do 1 more practice
+                  problem on it
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t2')">
+              <div class="task-checkbox" id="m6t2">✓</div>
+              <div>
+                <div class="task-text">
+                  Finalize your formula sheet — it should have all key formulas
+                  in one place
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">11:00 AM – 12:00 PM</div>
+              <div class="event-title">⚡ Electronics Quick Review</div>
+              <div class="event-sub">Clampers + BJT Summary</div>
+            </div>
+            <div><span class="event-badge badge-study">Review</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t3')">
+              <div class="task-checkbox" id="m6t3">✓</div>
+              <div>
+                <div class="task-text">
+                  Draw 1 clamper circuit from memory and sketch the output
+                  waveform
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t4')">
+              <div class="task-checkbox" id="m6t4">✓</div>
+              <div>
+                <div class="task-text">
+                  Recall BJT 3 regions and the conditions for each
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">12:00 – 1:00 PM</div>
+              <div class="event-title">🍱 Lunch</div>
+              <div class="event-sub">Eat a good meal. You deserve it!</div>
+            </div>
+            <div><span class="event-badge badge-break">Break</span></div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-study"></div>
+            <div class="event-info">
+              <div class="event-time">1:00 – 3:00 PM</div>
+              <div class="event-title">🎯 Weak Spots Final Practice</div>
+              <div class="event-sub">KVL + Analytical Focus</div>
+            </div>
+            <div><span class="event-badge badge-study">Study</span></div>
+            <button class="event-expand-btn" onclick="toggleTasks(this)">
+              ▾
+            </button>
+          </div>
+          <div class="event-tasks">
+            <div class="tasks-label">Tasks</div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t5')">
+              <div class="task-checkbox" id="m6t5">✓</div>
+              <div>
+                <div class="task-text">
+                  Do 4 KVL problems — timed, no notes, using GFSA format
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t6')">
+              <div class="task-checkbox" id="m6t6">✓</div>
+              <div>
+                <div class="task-text">
+                  Check each solution and note if you're improving from earlier
+                  this week
+                </div>
+              </div>
+            </div>
+            <div class="task-item" onclick="toggleTask(this, 'm6t7')">
+              <div class="task-checkbox" id="m6t7">✓</div>
+              <div>
+                <div class="task-text">
+                  Write 3 things you've learned this week that you didn't know
+                  on Monday
+                </div>
+              </div>
+            </div>
+            <div class="study-tip">
+              <strong>💡 You made it!</strong> Reflect on growth, not
+              perfection. Consistent effort over 7 days beats cramming any time.
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-header">
+            <div class="event-stripe stripe-break"></div>
+            <div class="event-info">
+              <div class="event-time">3:00 PM onwards</div>
+              <div class="event-title">🌸 Full Rest</div>
+              <div class="event-sub">
+                Prepare for the week ahead. Sleep early!
+              </div>
+            </div>
+            <div><span class="event-badge badge-break">Rest</span></div>
+          </div>
+        </div>
+
+        <div class="day-nav">
+          <button class="nav-btn" onclick="showDay(5)">← Sat</button>
+          <span class="nav-center">Day 7 of 7</span>
+          <button class="nav-btn" disabled>Done! ✓</button>
+        </div>
+      </div>
+
+      <!-- ===== TOPIC TRACKER ===== -->
+      <div style="margin-top: 24px">
+        <div class="topic-tracker">
+          <div class="tracker-title">📋 Topic Mastery Tracker</div>
+          <div class="topic-grid">
+            <div class="topic-row" onclick="toggleTopic(this, 'tp0')">
+              <div class="topic-checkbox" id="tp0">✓</div>
+              <span class="topic-name">Naive Gaussian Elimination</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp1')">
+              <div class="topic-checkbox" id="tp1">✓</div>
+              <span class="topic-name">Gauss-Jordan Elimination</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp2')">
+              <div class="topic-checkbox" id="tp2">✓</div>
+              <span class="topic-name">Gauss-Jacobi (Iterative)</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp3')">
+              <div class="topic-checkbox" id="tp3">✓</div>
+              <span class="topic-name">Gauss-Seidel (Iterative)</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp4')">
+              <div class="topic-checkbox" id="tp4">✓</div>
+              <span class="topic-name">Euler's Method (ODE)</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp5')">
+              <div class="topic-checkbox" id="tp5">✓</div>
+              <span class="topic-name">Golden Section Search</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp6')">
+              <div class="topic-checkbox" id="tp6">✓</div>
+              <span class="topic-name">Runge-Kutta Method (RK4)</span
+              ><span class="topic-cat cat-num">Num. Methods</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp7')">
+              <div class="topic-checkbox" id="tp7">✓</div>
+              <span class="topic-name">Clamper Circuits</span
+              ><span class="topic-cat cat-elec">Electronics</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp8')">
+              <div class="topic-checkbox" id="tp8">✓</div>
+              <span class="topic-name">Bipolar Junction Transistor (BJT)</span
+              ><span class="topic-cat cat-elec">Electronics</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp9')">
+              <div class="topic-checkbox" id="tp9">✓</div>
+              <span class="topic-name">KVL Problem Solving</span
+              ><span class="topic-cat cat-skill">Skill</span>
+            </div>
+            <div class="topic-row" onclick="toggleTopic(this, 'tp10')">
+              <div class="topic-checkbox" id="tp10">✓</div>
+              <span class="topic-name">Analytical / GFSA Method</span
+              ><span class="topic-cat cat-skill">Skill</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEGEND -->
+        <div class="topic-tracker" style="margin-top: 0; margin-bottom: 8px">
+          <div
+            style="
+              font-size: 12px;
+              color: var(--muted);
+              margin-bottom: 8px;
+              font-weight: 500;
+            "
+          >
+            Color Legend
+          </div>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background: var(--class-bg)"></div>
+              Classes
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: var(--study-bg)"></div>
+              Study Blocks
+            </div>
+            <div class="legend-item">
+              <div
+                class="legend-dot"
+                style="background: var(--transit-bg)"
+              ></div>
+              Transit / Walk
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: var(--break-bg)"></div>
+              Rest / Break
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end main -->
+
+    <div class="footer">
+      🌸 Study Planner · May 4–10, 2025<br />
+      Made for CE Students · Progress saves automatically
+    </div>
+
+    <script>
+      const STORAGE_KEY = "studyplanner_may4";
+
+      function getState() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        } catch (e) {
+          return {};
+        }
+      }
+      function saveState(s) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+        } catch (e) {}
+      }
+
+      let currentDay = 0;
+
+      function showDay(idx) {
+        document
+          .querySelectorAll(".day-view")
+          .forEach((d) => d.classList.remove("active"));
+        document
+          .querySelectorAll(".day-tab")
+          .forEach((t) => t.classList.remove("active"));
+        document.getElementById("day-" + idx).classList.add("active");
+        document.getElementById("tab-" + idx).classList.add("active");
+        currentDay = idx;
+        document
+          .getElementById("tab-" + idx)
+          .scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+          });
+      }
+
+      function toggleTasks(btn) {
+        const card = btn.closest(".event-card");
+        const tasks = card.querySelector(".event-tasks");
+        if (!tasks) return;
+        const open = tasks.classList.toggle("open");
+        btn.textContent = open ? "▴" : "▾";
+      }
+
+      function toggleTask(el, id) {
+        const cb = document.getElementById(id);
+        const txt = el.querySelector(".task-text");
+        const state = getState();
+        const checked = !state[id];
+        state[id] = checked;
+        saveState(state);
+        applyTaskState(cb, txt, checked);
+        updateAllProgress();
+      }
+
+      function applyTaskState(cb, txt, checked) {
+        if (checked) {
+          cb.classList.add("checked");
+          txt && txt.classList.add("done");
+        } else {
+          cb.classList.remove("checked");
+          txt && txt.classList.remove("done");
+        }
+      }
+
+      function toggleTopic(el, id) {
+        const cb = document.getElementById(id);
+        const state = getState();
+        const checked = !state[id];
+        state[id] = checked;
+        saveState(state);
+        applyTopicState(cb, checked);
+        updateAllProgress();
+      }
+
+      function applyTopicState(cb, checked) {
+        if (checked) {
+          cb.classList.add("mastered");
+        } else {
+          cb.classList.remove("mastered");
+        }
+      }
+
+      const dayTaskMap = [
+        [
+          "m0t0",
+          "m0t1",
+          "m0t2",
+          "m0t3",
+          "m0t4",
+          "m0t5",
+          "m0t6",
+          "m0t7",
+          "m0t8",
+          "m0t9",
+          "m0t10",
+          "m0t11",
+          "m0t12",
+        ],
+        ["m1t0", "m1t1", "m1t2", "m1t3", "m1t4", "m1t5", "m1t6", "m1t7"],
+        ["m2t0", "m2t1", "m2t2", "m2t3"],
+        [
+          "m3t0",
+          "m3t1",
+          "m3t2",
+          "m3t3",
+          "m3t4",
+          "m3t5",
+          "m3t6",
+          "m3t7",
+          "m3t8",
+          "m3t9",
+          "m3t10",
+          "m3t11",
+        ],
+        [
+          "m4t0",
+          "m4t1",
+          "m4t2",
+          "m4t3",
+          "m4t4",
+          "m4t5",
+          "m4t6",
+          "m4t7",
+          "m4t8",
+          "m4t9",
+          "m4t10",
+          "m4t11",
+          "m4t12",
+          "m4t13",
+          "m4t14",
+        ],
+        [
+          "m5t0",
+          "m5t1",
+          "m5t2",
+          "m5t3",
+          "m5t4",
+          "m5t5",
+          "m5t6",
+          "m5t7",
+          "m5t8",
+          "m5t9",
+          "m5t10",
+          "m5t11",
+        ],
+        ["m6t0", "m6t1", "m6t2", "m6t3", "m6t4", "m6t5", "m6t6", "m6t7"],
+      ];
+
+      const topicIds = [
+        "tp0",
+        "tp1",
+        "tp2",
+        "tp3",
+        "tp4",
+        "tp5",
+        "tp6",
+        "tp7",
+        "tp8",
+        "tp9",
+        "tp10",
+      ];
+
+      function updateAllProgress() {
+        const state = getState();
+        let totalTasks = 0,
+          doneTasks = 0;
+
+        dayTaskMap.forEach((ids, i) => {
+          const done = ids.filter((id) => state[id]).length;
+          const total = ids.length;
+          totalTasks += total;
+          doneTasks += done;
+          const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+          const bar = document.getElementById("dp-" + i);
+          const label = document.getElementById("dpp-" + i);
+          if (bar) bar.style.width = pct + "%";
+          if (label) label.textContent = pct + "%";
+        });
+
+        const topicsDone = topicIds.filter((id) => state[id]).length;
+        totalTasks += topicIds.length;
+        doneTasks += topicsDone;
+
+        const overall =
+          totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+        document.getElementById("overallPct").textContent = overall + "%";
+        document.getElementById("overallBar").style.width = overall + "%";
+      }
+
+      function loadAllState() {
+        const state = getState();
+        dayTaskMap.forEach((ids) => {
+          ids.forEach((id) => {
+            const cb = document.getElementById(id);
+            if (!cb) return;
+            const row = cb.closest(".task-item");
+            const txt = row ? row.querySelector(".task-text") : null;
+            applyTaskState(cb, txt, !!state[id]);
+          });
+        });
+        topicIds.forEach((id) => {
+          const cb = document.getElementById(id);
+          if (cb) applyTopicState(cb, !!state[id]);
+        });
+        updateAllProgress();
+      }
+
+      function toggleTheme() {
+        const body = document.body;
+        const isDark = body.getAttribute("data-theme") === "dark";
+        body.setAttribute("data-theme", isDark ? "light" : "dark");
+        document.getElementById("themeBtn").textContent = isDark ? "🌙" : "☀️";
+        try {
+          localStorage.setItem("studyplanner_theme", isDark ? "light" : "dark");
+        } catch (e) {}
+      }
+
+      // Init
+      window.addEventListener("DOMContentLoaded", () => {
+        try {
+          const savedTheme = localStorage.getItem("studyplanner_theme");
+          if (savedTheme) {
+            document.body.setAttribute("data-theme", savedTheme);
+            document.getElementById("themeBtn").textContent =
+              savedTheme === "dark" ? "☀️" : "🌙";
+          }
+        } catch (e) {}
+        loadAllState();
+      });
+    </script>
+  </body>
+</html>
